@@ -14,7 +14,7 @@ setup(
     install_requires=reqs,
     entry_points={
         'console_scripts': [
-            'igvtree = igvtree.cli:base'
+            'igvtree = igvtree.builder:build_tree'
         ]
     }
 )
