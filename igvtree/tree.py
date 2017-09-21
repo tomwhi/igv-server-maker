@@ -1,5 +1,5 @@
 from collections import defaultdict
-import functools
+import functools, ntpath
 
 
 class TreeLevel:
@@ -74,6 +74,10 @@ class FilenamesNode:
         else:
             return [self.parent] + self.parent.get_ancestors()
 
+    def get_resource_name(self):
+        assert self.filename
+        return ntpath.basename(self.filename)
+
     # FIXME: Probably refactor to at least use XML ElementTree
     def print_xml(self, indent):
 
@@ -83,7 +87,10 @@ class FilenamesNode:
                 print("<Global name=\"%s\">" % self.name)
             else:
                 print("%s<Category name=\"%s\">" % (total_indent, self.name))
-            for child in self.childname_to_child.values():
+            childnames_sorted = list(self.childname_to_child.keys())
+            childnames_sorted.sort()
+            for childname in childnames_sorted:
+                child = self.childname_to_child[childname]
                 child.print_xml(indent + 1)
             if self.parent == None:
                 print("</Global>")
@@ -96,7 +103,7 @@ class FilenamesNode:
             attr_lists = [node.attrs for node in [self] + self.get_ancestors()]
             combined_attrs = set(functools.reduce(lambda l1, l2: l1 + l2, attr_lists))
             attr_string = " ".join(combined_attrs)
-            print("%s<Resource name=\"%s\" %s>" % (total_indent, self.name, attr_string))
+            print("%s<Resource name=\"%s\" %s" % (total_indent, self.get_resource_name(), attr_string))
             print("%spath=\"%s\">" % (("  " * (indent + 1)), self.filename))
             print("%s</Resource>" % (total_indent))
 
