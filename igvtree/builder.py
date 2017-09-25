@@ -1,10 +1,11 @@
-import json, logging, re
+import json, logging
 import click
 from igvtree.tree import TreeLevel, FilenamesTree
 
 
 def define_tree_levels(rules):
-    return {level_name: TreeLevel(level_name, regexs) for level_name, regexs in rules.items()}
+    return {level_name: TreeLevel(level_name, node_mappings)
+            for level_name, node_mappings in rules.items()}
 
 
 @click.command()
@@ -19,12 +20,9 @@ def build_tree(loglevel, file_list, rules_json, node_attrs_json):
 
     rule_dict = json.load(rules_json)
 
-    rules = {level_name: [re.compile(regex) for regex in regexs]
-             for level_name, regexs in rule_dict.items()}
-
     node_attrs = json.load(node_attrs_json)
 
-    tree_levels = define_tree_levels(rules)
+    tree_levels = define_tree_levels(rule_dict)
 
     # Record which node values map to which filenames and vice-versa, for each node level...
     for level_name, tree_level in tree_levels.items():

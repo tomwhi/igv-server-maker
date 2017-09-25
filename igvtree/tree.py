@@ -1,19 +1,18 @@
 from collections import defaultdict
-import functools, ntpath
+import functools, ntpath, re
 
 
 class TreeLevel:
-    def __init__(self, name, regexs):
+    def __init__(self, name, node_mappings):
         '''
         name: Descriptive name of this tree level
-        regexs: Regular expressions used to define nodes at this tree level,
-            when given a set of input filenames
+        node_mappings: Dictionary of regex string -> node name mapping
         attrs: Dictionary of string->string attribute names and values, providing
             features associated with this tree level; e.g. to be used in styling
             leaf nodes under this tree level.
         '''
         self.name = name
-        self.regexs = regexs
+        self.node_mappings = node_mappings
         self.node_value_to_filenames = defaultdict(set)
         self.filename_to_node_value = defaultdict(set)
 
@@ -28,16 +27,18 @@ class TreeLevel:
         '''
 
         found_match = False
-        for regex in self.regexs:
+        for regex_str in self.node_mappings.keys():
+            node_name = self.node_mappings[regex_str]
+            regex = re.compile(regex_str)
             match = regex.search(filename)
             if match != None:
                 found_match = True
                 matching_nodename = match.group()
-                if len(self.regexs) > 1:
-                    # More than one regexs are explicitly stated for this
-                    # tree level => Each regex will be a separate node, rather
-                    # than each match being a separate node:
-                    matching_nodename = regex.pattern
+                if node_name != None:
+                    # A node name is specifically stated for this regex =>
+                    # Use that node name for this match, rather than each
+                    # match being a separate node:
+                    matching_nodename = node_name
                 self.node_value_to_filenames[matching_nodename].add(filename)
                 assert filename not in self.filename_to_node_value
                 self.filename_to_node_value[filename] = matching_nodename
