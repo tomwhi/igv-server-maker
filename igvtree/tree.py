@@ -40,7 +40,6 @@ class TreeLevel:
                     # match being a separate node:
                     matching_nodename = node_name
                 self.node_value_to_filenames[matching_nodename].add(filename)
-                assert filename not in self.filename_to_node_value
                 self.filename_to_node_value[filename] = matching_nodename
 
         if not found_match:
