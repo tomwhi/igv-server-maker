@@ -10,10 +10,11 @@ def define_tree_levels(rules):
 
 @click.command()
 @click.option('--loglevel', default='INFO', help='level of logging')
+@click.option('--name', default='Base', help='Base name for the XML tree')
 @click.argument('file-list', type=click.File('r'))
 @click.argument('rules-json', type=click.File('r'))
 @click.argument('node-attrs-json', type=click.File('r'))
-def build_tree(loglevel, file_list, rules_json, node_attrs_json):
+def build_tree(loglevel, file_list, rules_json, node_attrs_json, name):
     setup_logging(loglevel)
 
     filenames = [line.strip() for line in file_list]
@@ -29,7 +30,7 @@ def build_tree(loglevel, file_list, rules_json, node_attrs_json):
         for filename in filenames:
             tree_level.assign_filename(filename)
 
-    filenames_tree = FilenamesTree("Base", tree_levels)
+    filenames_tree = FilenamesTree(name, tree_levels)
     for filename in filenames:
         filenames_tree.insert_filename(filename, node_attrs)
 
