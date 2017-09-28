@@ -86,33 +86,38 @@ class FilenamesNode:
     # FIXME: Probably refactor to at least use XML ElementTree
     def print_xml(self, indent):
 
-        total_indent = ("  " * indent)
-        if len(self.childname_to_child) > 0:
-            if self.parent == None:
-                print("<Global name=\"%s\">" % self.name)
-            else:
-                print("%s<Category name=\"%s\">" % (total_indent, self.name))
-            childnames_sorted = list(self.childname_to_child.keys())
-            childnames_sorted.sort()
-            for childname in childnames_sorted:
-                child = self.childname_to_child[childname]
-                child.print_xml(indent + 1)
-            if self.parent == None:
-                print("</Global>")
-            else:
-                print("%s</Category>" % (total_indent))
-            assert len(self.filenames) == 0
+        if self.parent == None:
+            print("<Global name=\"%s\">" % self.name)
         else:
-            assert len(self.filenames) > 0
-            # Condense attribute lists of this node and all parents into a single set:
-            attr_lists = [node.attrs for node in [self] + self.get_ancestors()]
-            combined_attrs = set(functools.reduce(lambda l1, l2: l1 + l2, attr_lists))
-            attr_string = " ".join(combined_attrs)
+            print("%s<Category name=\"%s\">" % (("  " * indent), self.name))
 
-            for filename in self.filenames:
-                print("%s<Resource name=\"%s\" %s" % (total_indent, ntpath.basename(filename), attr_string))
-                print("%spath=\"%s\">" % (("  " * (indent + 1)), filename))
-                print("%s</Resource>" % (total_indent))
+        childnames_sorted = list(self.childname_to_child.keys())
+        childnames_sorted.sort()
+        # This should only end up getting executed if there are child
+        # nodes for this node, which should mean there are no filenames
+        # stored directly at this node:
+        for childname in childnames_sorted:
+            child = self.childname_to_child[childname]
+            child.print_xml(indent + 1)
+
+        # Condense attribute lists of this node and all parents into a single set:
+        attr_lists = [node.attrs for node in [self] + self.get_ancestors()]
+        combined_attrs = set(functools.reduce(lambda l1, l2: l1 + l2, attr_lists))
+        attr_string = " ".join(combined_attrs)
+
+        # This should only end up getting executed if there are no child
+        # nodes for this node; so the leaf node filenames can be printed here:
+        for filename in self.filenames:
+            print("%s<Resource name=\"%s\" %s" % (("  " * (indent + 1)),
+                                                  ntpath.basename(filename),
+                                                  attr_string))
+            print("%spath=\"%s\">" % (("  " * (indent + 2)), filename))
+            print("%s</Resource>" % (("  " * (indent + 1))))
+
+        if self.parent == None:
+            print("</Global>")
+        else:
+            print("%s</Category>" % (("  " * indent)))
 
 
 class FilenamesTree:
@@ -139,7 +144,6 @@ class FilenamesTree:
         # computed at this point, and populated with two dictionaries indicating
         # how each nodes maps to filenames, and how filenames map to nodes.
         for level_name, tree_level in self.levels.items():
-
             # Retrieve the name of the node that this filename has been
             # assigned to at this level:
             selected_child_name = tree_level.filename_to_node_value[filename]
