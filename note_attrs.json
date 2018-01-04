@@ -1,0 +1,14 @@
+{
+    "CNV kit segments": ["color=\"255,1,155\"", "trackLine='graphType=\"points\" yLineOnOff=\"on\" viewLimits=-2:2 altColor=\"255,1,155\" height=\"100\"'"],
+    "CNV kit profile": ["color=\"255,1,155\"", "trackLine='graphType=\"points\" yLineOnOff=\"on\" viewLimits=-2:2 altColor=\"255,1,155\" height=\"100\"'"],
+    "QDNAseq segments": ["color=\"153,0,92\"", "altColor=\"255,1,155\"", "trackLine='graphType=\"points\" yLineOnOff=\"on\" viewLimits=0:10 altColor=\"153,0,92\" height=\"100\"'"],
+    "QDNAseq profile": ["color=\"153,0,92\"", "altColor=\"255,1,155\"", "trackLine='featureVisibilityWindow=\"-1\" graphType=\"points\" yLineOnOff=\"on\" viewLimits=0:10 altColor=\"153,0,92\" height=\"100\"'"],
+    "SNP allelic fractions": ["color=\"66,244,197\"", "altColor=\"66,244,197\"", "trackLine='featureVisibilityWindow=\"-1\" graphType=\"points\" yLineOnOff=\"on\" viewLimits=0:1 height=\"100\"'"],
+    "svcaller reads": ["trackLine='visibility=\"squish\" viewAsPairs=\"true\" featureVisibilityWindow=\"-1\"'"],
+    "BWA mapped reads": ["trackLine='visibility=\"squish\" viewAsPairs=\"true\"'"],
+    "svcaller events": ["trackLine='visibility=\"squish\" featureVisibilityWindow=\"-1\"'"],
+    "Deletion junctions": ["color=\"blue\""],
+    "Duplication junctions": ["color=\"red\""],
+    "Inversion junctions": ["color=\"green\""],
+    "Translocation junctions": ["color=\"purple\""]
+}

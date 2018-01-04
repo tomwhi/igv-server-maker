@@ -1,0 +1,34 @@
+{
+  "PatientID": {"P-[^\/-]+": null},
+  "SampleType": {
+    "[\/_]{1}[LB-]*P-[^\/-]+-N-": "Normal",
+    "[\/_]{1}[LB-]*P-[^\/-]+-CFDNA-": "CFDNA",
+    "[\/_]{1}[LB-]*P-[^\/-]+-T-": "Tumour"
+    },
+  "SampleID": {"[CFDNAT]+-[A-Z0-9]+": null},
+  "FileSuffix": {
+    "nodups.bam": "BWA mapped reads",
+    "somatic.vep.vcf.gz": "somatic variants",
+    "germline.vep.vcf.gz": "germline variants",
+    "combined.bed": "svcaller summary",
+    "[DELUPINVTRA]{3}.bam": "svcaller reads",
+    "[DELUPINVTRA]{3}.gtf": "svcaller events",
+    "qdnaseq_copynumber.*tdf": "QDNAseq profile",
+    "qdnaseq_segments.*bedGraph": "QDNAseq segments",
+    "_profile.bedGraph": "CNV kit profile",
+    "_segments.bedGraph": "CNV kit segments",
+    "allelicFractions.bedGraph": "SNP allelic fractions",
+    "overview.bed": "Svcaller overview"
+  },
+  "AlgorithmSemanticOutput": {
+    "nodups.bam": "BWA bam",
+    "vcf.gz": "vcf",
+    "tdf": "tdf",
+    "bed": "bed",
+    "bedGraph": "bedGraph",
+    "DEL": "Deletion junctions",
+    "DUP": "Duplication junctions",
+    "INV": "Inversion junctions",
+    "TRA": "Translocation junctions"
+  }
+}
