@@ -1,4 +1,4 @@
-import json, logging
+import json, logging, os, re
 import click
 from igvtree.tree import TreeLevel, FilenamesTree
 
@@ -49,3 +49,22 @@ def setup_logging(loglevel="INFO"):
     logging.basicConfig(level=numeric_level,
                         format='%(levelname)s %(asctime)s %(funcName)s - %(message)s')
     logging.debug("Started log with loglevel %(loglevel)s" % {"loglevel": loglevel})
+
+
+@click.command()
+@click.option('--loglevel', default='INFO', help='level of logging')
+@click.option('--basedir', default='/scratch/tmp/thowhi/liqbio_full_pipeline_tests',
+              help='LIQBIO autoseq output folder, containing outputs for various patient SDIDs.')
+@click.argument('pattern-list-file', type=click.File('r'))
+@click.argument('output_filename', type=click.Path())
+def list_files_eg(loglevel, basedir, pattern_list_file, output_filename):
+    setup_logging(loglevel)
+
+    pattern_list = [line.strip() for line in pattern_list_file.readlines()]
+    with open(output_filename, 'w') as output_file:
+        for root, dirs, files in os.walk(basedir):
+            for contained_file in files:
+                for pattern in pattern_list:
+                    path = os.path.join(root, contained_file)
+                    if re.search(pattern, path):
+                        print(path, file=output_file)

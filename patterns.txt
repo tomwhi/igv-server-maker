@@ -1,0 +1,9 @@
+.*somatic.vep.vcf.gz$
+.*DEL.bam$
+.*DUP.bam$
+.*INV.bam$
+.*TRA.bam$
+.*.gtf$
+.*_qdnaseq_copynumber.tdf$
+.*.bedGraph$
+.*_combined.bed$
